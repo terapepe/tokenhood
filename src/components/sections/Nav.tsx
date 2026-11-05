@@ -10,7 +10,6 @@ export const NAV = [
   { href: "#home", label: "Home" },
   { href: "#about", label: "About" },
   { href: "#token", label: "Token" },
-  { href: "#chart", label: "Chart" },
   { href: "#community", label: "Community" },
 ];
 

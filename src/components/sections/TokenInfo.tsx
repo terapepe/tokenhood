@@ -1,47 +1,30 @@
 "use client";
 
-import { Copy, ExternalLink, ShoppingCart, PlusCircle, ShieldCheck, ShieldAlert, Info } from "lucide-react";
+import { Copy, ExternalLink, ShoppingCart, PlusCircle, Info } from "lucide-react";
 import { CONFIG, explorerTokenUrl, hasContract } from "@/config/site";
 import { useOverview, val } from "@/hooks/useTokenData";
 import { Reveal, SectionHead, SmartLink, useCopy, useLinks } from "@/components/ui/primitives";
 import { useToast } from "@/components/ui/Toast";
-import { fmtToken, fmtUsd, shortAddr } from "@/lib/format";
+import { fmtToken } from "@/lib/format";
 
 type EthProvider = { request: (a: { method: string; params?: unknown[] }) => Promise<unknown> };
 
 export default function TokenInfo() {
   const { data, isLoading } = useOverview();
-  const m = val(data?.market);
   const oc = val(data?.onchain);
   const toast = useToast();
   const { copy } = useCopy();
   const { buyUrl } = useLinks();
 
   const supply = oc ? fmtToken(Number(oc.totalSupply)) : "N/A";
-  const owner = !oc
-    ? { text: "N/A", tone: "mute" as const }
-    : oc.owner.status === "renounced"
-      ? { text: "Renounced (owner = 0x0, verified onchain)", tone: "good" as const }
-      : oc.owner.status === "owned"
-        ? { text: `Owned by ${shortAddr(oc.owner.address!)}`, tone: "warn" as const }
-        : { text: "No owner() function detected", tone: "mute" as const };
 
   const rows: [string, React.ReactNode, string?][] = [
     ["Token Name", oc?.name ?? CONFIG.tokenName],
     ["Symbol", oc?.symbol ?? CONFIG.tokenSymbol],
-    ["Network", CONFIG.network.name, `Chain ID ${CONFIG.network.chainId}`],
+    ["Network", CONFIG.networksLabel],
     ["Token Standard", CONFIG.tokenStandard],
     ["Total Supply", isLoading ? "…" : supply, oc ? "Read from contract" : undefined],
     ["Contract Address", hasContract ? <span className="font-mono text-xs break-all sm:text-sm">{CONFIG.contractAddress}</span> : "Not published yet"],
-    ["Liquidity", isLoading ? "…" : fmtUsd(m?.liquidityUsd), m ? "DexScreener, all pairs" : undefined],
-    ["Tax", CONFIG.taxInfo || "N/A", CONFIG.taxInfo ? undefined : "Not verified — not claimed"],
-    [
-      "Ownership",
-      <span key="o" className={`inline-flex items-center gap-1.5 ${owner.tone === "good" ? "text-hood" : owner.tone === "warn" ? "text-amber-300" : ""}`}>
-        {owner.tone === "good" ? <ShieldCheck className="h-4 w-4" /> : owner.tone === "warn" ? <ShieldAlert className="h-4 w-4" /> : null}
-        {owner.text}
-      </span>,
-    ],
   ];
 
   const addNetwork = async () => {
@@ -62,7 +45,7 @@ export default function TokenInfo() {
   return (
     <section id="token" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <SectionHead eyebrow="Token information" title={<>The <span className="text-hood">$HOOD</span> facts.</>} sub="Supply and ownership are read directly from the contract. Nothing here is claimed without verification." />
+        <SectionHead eyebrow="Token information" title={<>The <span className="text-hood">$HOOD</span> facts.</>} sub="Supply is read directly from the contract. Nothing here is claimed without verification." />
 
         <div className="grid gap-4 lg:grid-cols-[1.4fr_1fr]">
           <Reveal className="card overflow-hidden">

@@ -17,12 +17,11 @@ export const CONFIG = {
   website: "https://tokenhood.online",
   siteHost: "tokenhood.online",
 
-  /** Optional overrides. If empty, the DexScreener pair URL is discovered from the API. */
-  dexScreenerUrl: env(process.env.NEXT_PUBLIC_DEXSCREENER_URL),
+  /** Optional override. Default: Uniswap swap on Robinhood Chain for the contract. */
   buyUrl: env(process.env.NEXT_PUBLIC_BUY_URL),
 
-  /** Not verifiable generically onchain — fill in only once verified. Empty → "N/A". */
-  taxInfo: env(process.env.NEXT_PUBLIC_TAX_INFO),
+  /** Networks shown in Token Information. */
+  networksLabel: "Robinhood Chain, Base, BSC",
 
   social: {
     twitterUrl: env(process.env.NEXT_PUBLIC_TWITTER_URL),
@@ -43,10 +42,6 @@ export const CONFIG = {
 
   /** Data providers. Slugs are configurable in case a provider renames the network. */
   data: {
-    dexScreenerApi: "https://api.dexscreener.com",
-    dexScreenerChain: env(process.env.DEXSCREENER_CHAIN, "robinhood"),
-    geckoApi: "https://api.geckoterminal.com/api/v2",
-    geckoNetwork: env(process.env.GECKO_NETWORK, "robinhood"),
     blockscoutApi: "https://robinhoodchain.blockscout.com/api/v2",
     refreshMs: 30_000,
   },
@@ -59,6 +54,11 @@ export const CONFIG = {
 } as const;
 
 export const hasContract = /^0x[a-fA-F0-9]{40}$/.test(CONFIG.contractAddress);
+
+/** Uniswap web app swap (chain slug "robinhood" per Uniswap interface chainMetadata). */
+export const uniswapUrl = hasContract
+  ? `https://app.uniswap.org/swap?chain=robinhood&inputCurrency=NATIVE&outputCurrency=${CONFIG.contractAddress}`
+  : "";
 
 export const explorerTokenUrl = hasContract
   ? `${CONFIG.network.explorerUrl}/token/${CONFIG.contractAddress}`

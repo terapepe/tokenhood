@@ -2,8 +2,7 @@
 
 import { useEffect, useRef, useState, type ReactNode, type ElementType } from "react";
 import { Check, Copy } from "lucide-react";
-import { CONFIG, hasContract } from "@/config/site";
-import { useOverview, val } from "@/hooks/useTokenData";
+import { CONFIG, hasContract, uniswapUrl } from "@/config/site";
 import { useToast } from "./Toast";
 
 /** Adds .in when scrolled into view. */
@@ -92,15 +91,9 @@ export function ContractPill({ className = "" }: { className?: string }) {
   );
 }
 
-/** Resolves real outbound links (buy / dexscreener) from config + live data. */
+/** Outbound buy link: config override, else Uniswap on Robinhood Chain. */
 export function useLinks() {
-  const { data } = useOverview();
-  const m = val(data?.market);
-  const dexUrl =
-    CONFIG.dexScreenerUrl ||
-    m?.pairUrl ||
-    (hasContract ? `https://dexscreener.com/${CONFIG.data.dexScreenerChain}/${CONFIG.contractAddress}` : "");
-  return { dexUrl, buyUrl: CONFIG.buyUrl || dexUrl };
+  return { buyUrl: CONFIG.buyUrl || uniswapUrl };
 }
 
 /** A link button that degrades gracefully (toast + scroll) when the target isn't configured. */

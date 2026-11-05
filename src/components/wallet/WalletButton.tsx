@@ -19,7 +19,6 @@ export default function WalletButton({ compact = false }: { compact?: boolean })
   const ref = useRef<HTMLDivElement>(null);
 
   const isEvm = session?.kind === "evm";
-  const onRobinhood = isEvm && chain?.id === robinhoodChain.id;
   const { data: bal } = useReadContract({
     address: CONFIG.contractAddress as Address,
     abi: erc20Abi,
@@ -89,9 +88,6 @@ export default function WalletButton({ compact = false }: { compact?: boolean })
                 </button>
               ))}
             </div>
-          )}
-          {isEvm && !onRobinhood && (
-            <p className="px-3 pb-1 text-[11px] text-mute">$HOOD lives on Robinhood Chain.</p>
           )}
           <MenuItem icon={Copy} onClick={() => navigator.clipboard.writeText(session.address).then(() => toast("Address copied", "success"))}>
             Copy address

@@ -8,7 +8,6 @@ import { XIcon, TelegramIcon } from "./Community";
 const LINKS = [
   ["About", "#about"],
   ["Token", "#token"],
-  ["Chart", "#chart"],
   ["Community", "#community"],
 ];
 

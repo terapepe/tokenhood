@@ -1,11 +1,11 @@
 "use client";
 
-import { ArrowRight, LineChart } from "lucide-react";
+import { ArrowRight, ExternalLink } from "lucide-react";
 import Mascot from "@/components/brand/Mascot";
 import Skyline from "@/components/brand/Skyline";
 import Particles from "@/components/brand/Particles";
 import { ContractPill, SmartLink, useLinks } from "@/components/ui/primitives";
-import { CONFIG } from "@/config/site";
+import { CONFIG, explorerTokenUrl } from "@/config/site";
 
 export default function Hero() {
   const { buyUrl } = useLinks();
@@ -53,8 +53,8 @@ export default function Hero() {
             <SmartLink href={buyUrl} className="btn-primary h-14 px-8 text-base" fallbackMsg="Trading opens once the $HOOD contract is published">
               BUY $HOOD <ArrowRight className="h-4 w-4" />
             </SmartLink>
-            <a href="#chart" className="btn-ghost h-14 px-8 text-base">
-              <LineChart className="h-4 w-4" /> VIEW CHART
+            <a href={explorerTokenUrl} target="_blank" rel="noopener noreferrer" className="btn-ghost h-14 px-8 text-base">
+              VIEW EXPLORER <ExternalLink className="h-4 w-4" />
             </a>
           </div>
 
@@ -69,7 +69,7 @@ export default function Hero() {
           <div className="absolute right-0 bottom-[14%] hidden rounded-2xl border border-line bg-panel/80 px-4 py-3 backdrop-blur sm:block">
             <p className="font-mono text-[10px] tracking-widest text-mute">NETWORK</p>
             <p className="mt-1 flex items-center gap-2 text-sm font-bold">
-              <span className="h-2 w-2 rounded-full bg-hood shadow-[0_0_10px_#00D47B]" /> {CONFIG.network.name}
+              <span className="h-2 w-2 rounded-full bg-hood shadow-[0_0_10px_#00D47B]" /> {CONFIG.networksLabel}
             </p>
           </div>
           <div className="absolute top-[16%] left-0 hidden rounded-2xl border border-line bg-panel/80 px-4 py-3 backdrop-blur sm:block">
